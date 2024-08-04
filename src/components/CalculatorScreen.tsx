@@ -1,18 +1,26 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { evaluate } from 'mathjs';
 
 // Main sreen component
-interface CalculatorScreenType extends React.HTMLAttributes<HTMLDivElement> {}
+interface CalculatorScreenProps {
+    onEquationChange?: (equation: string, ans: number, err: boolean) => void,
+    equation?: string
+}
+
+type CalculatorScreenType = CalculatorScreenProps & Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'>
 
 const CalculatorScreen = React.forwardRef<
     HTMLDivElement,
     CalculatorScreenType
->(({className, ...props}, ref) => {
+>(({className, onEquationChange, ...props}, ref) => {
 
-    const [inputValue, setInputValue] = useState("")
-    const [pera, setPera] = useState("")
+    const [inputValue, setInputValue] = useState(props.equation || "")
+    const [pera, setPera] = useState(props.equation || "")
+    const [equation, setEquation] = useState(props.equation || "")
 
     const [error, setError] = useState(false)
+
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const handalKeyPress = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
@@ -20,18 +28,31 @@ const CalculatorScreen = React.forwardRef<
                 setError(false)
                 let res = evaluate(inputValue)
                 setInputValue(res.toString())
+                if (onEquationChange) {
+                    onEquationChange(equation, res, false)
+                }
             } catch(err) {
                 setInputValue("")
                 setError(true)
+                if (onEquationChange) {
+                    onEquationChange(equation, 0, true)
+                }
             }
         }
-    }, [setInputValue, inputValue])
+    }, [setInputValue, inputValue, onEquationChange])
 
     const handaleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setError(false)
         setInputValue(e.target.value)
         setPera(e.target.value)
-    }, [setError, setInputValue, setPera])
+        setEquation(e.target.value)
+    }, [setError, setInputValue, setPera, setEquation])
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [inputRef]);
 
     return (
         <div 
@@ -48,6 +69,7 @@ const CalculatorScreen = React.forwardRef<
                 value={inputValue}
                 onChange={handaleChange}
                 onKeyDown={handalKeyPress}
+                ref={inputRef}
             />
         </div>
     )

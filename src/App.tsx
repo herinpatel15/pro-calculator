@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react"
 // import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition"
 import Home from "./pages/Home"
+import { Route, Routes } from "react-router-dom"
+import ProCal from "./pages/ProCal"
 
 type Recode = {
   n1: number,
@@ -76,7 +78,10 @@ function App() {
           ))
         }
       </ul> */}
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/pro-calculation" element={<ProCal />} />
+      </Routes>
     </main>
   )
 }
