@@ -1,0 +1,68 @@
+import React from 'react'
+
+interface CardType extends React.HTMLAttributes<HTMLDivElement> {}
+const Card = React.forwardRef<
+    HTMLDivElement,
+    CardType
+>(({className, ...props}, ref) => {
+    return (
+        <div
+            className={`rounded-xl max-w-md ${className}`}
+            {...props}
+            ref={ref}
+        />
+    )
+})
+Card.displayName = "Card"
+
+interface CardHeaderType extends React.HTMLAttributes<HTMLDivElement> {}
+const CardHeader = React.forwardRef<
+    HTMLDivElement,
+    CardHeaderType
+>(({className, ...props}, ref) => {
+    return (
+        <div 
+            className={`${className}`}
+            {...props}
+            ref={ref}
+        />
+    )
+})
+CardHeader.displayName = "CardHeader"
+
+interface CardBodyType extends React.HTMLAttributes<HTMLDivElement> {}
+const CardBody = React.forwardRef<
+    HTMLDivElement,
+    CardBodyType
+>(({className, ...props}, ref) => {
+    return (
+        <div 
+            className={`${className}`}
+            {...props}
+            ref={ref}
+        />
+    )
+})
+CardBody.displayName = "CardBody"
+
+interface CradFooterType extends React.HTMLAttributes<HTMLDivElement> {}
+const CradFooter = React.forwardRef<
+    HTMLDivElement,
+    CradFooterType
+>(({className, ...props}, ref) => {
+    return (
+        <div 
+            className={`${className}`}
+            {...props}
+            ref={ref}
+        />
+    )
+})
+CradFooter.displayName = "CradFooter"
+
+export {
+    Card,
+    CardHeader,
+    CardBody,
+    CradFooter
+}
